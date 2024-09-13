@@ -7,9 +7,9 @@ const Background = () => {
     ) as HTMLElement[];
 
     elements.forEach((element, index) => {
-      const delay = index * 0.06;
+      const delay = index * 0.5;
 
-      element.style.animation = `staggerOpacity 1.5s ease-in-out ${delay}s infinite alternate`;
+      element.style.animationDelay = `${delay}s`;
     });
   }, []);
 
