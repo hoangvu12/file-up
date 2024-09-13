@@ -58,17 +58,17 @@ const FileEntry: React.FC<FileEntryProps> = ({ file }) => {
 
       <div className="col-span-10">
         <div className="w-2/3">
-          <p className="line-clamp-2 break-words text-lg font-semibold">
+          <p className="line-clamp-2 break-words text-base font-semibold leading-none tracking-tight">
             {file.name}
           </p>
         </div>
 
-        <p className="text-base">{humanFileSize(file.size)}</p>
+        <p className="text-sm">{humanFileSize(file.size)}</p>
 
         <div className="flex w-full items-center gap-4">
           <Progress value={50} className="h-2.5 grow" />
 
-          <p className="font-semibold tabular-nums">50%</p>
+          <p className="text-sm font-semibold tabular-nums">50%</p>
         </div>
       </div>
 
