@@ -1,4 +1,18 @@
+import { useEffect } from "react";
+
 const Background = () => {
+  useEffect(() => {
+    const elements = Array.from(
+      document.querySelectorAll(".animate-opacity")
+    ) as HTMLElement[];
+
+    elements.forEach((element, index) => {
+      const delay = index * 0.06;
+
+      element.style.animation = `staggerOpacity 1.5s ease-in-out ${delay}s infinite alternate`;
+    });
+  }, []);
+
   return (
     <div className="fixed inset-0 -z-10 flex items-center justify-center">
       <svg
@@ -18,18 +32,22 @@ const Background = () => {
           height="1440"
         >
           <path
+            className="animate-opacity"
             d="M758.66 303.828C758.66 451.088 661.295 570.465 541.19 570.465C421.084 570.465 -329.322 53.9679 -329.322 -93.292C-329.322 -240.552 748.866 -37.8213 868.971 -37.8213C989.077 -37.8213 758.66 156.568 758.66 303.828Z"
             fill="url(#paint0_linear_21_169)"
           />
           <path
+            className="animate-opacity"
             d="M843.125 934.853C843.125 1082.11 745.76 1201.49 625.655 1201.49C505.549 1201.49 -163.542 1167.17 -163.542 1019.91C-163.542 872.645 -114.084 523.821 6.02197 523.821C126.128 523.821 843.125 787.593 843.125 934.853Z"
             fill="url(#paint1_radial_21_169)"
           />
           <path
+            className="animate-opacity"
             d="M1089.82 304.232C1413.89 596.92 1264.19 449.832 1542.53 442.422C1586.2 450.833 1660.32 451.233 1607.51 385.542C1541.5 303.427 1562.77 245.429 1480.27 155.965C1397.77 66.5011 1347.52 -24.3927 1222.97 -166.683C1098.41 -308.973 1088.83 -191.679 948.408 -202.798C807.988 -213.917 872.034 -196.26 678.29 10.1973C484.546 216.654 765.755 11.5432 1089.82 304.232Z"
             fill="#D9D9D9"
           />
           <path
+            className="animate-opacity"
             d="M783.874 764.614C350.194 815.672 559.47 799.913 381.712 1014.23C346.622 1041.55 297.497 1097.06 381.712 1100.59C486.98 1105 516.607 1159.21 638.264 1156.06C759.921 1152.91 861.407 1174.97 1050.51 1174.97C1239.62 1174.97 1157.67 1090.5 1258.53 992.169C1359.38 893.835 1303.91 930.395 1276.18 648.629C1248.44 366.864 1217.55 713.555 783.874 764.614Z"
             fill="#D9D9D9"
           />
@@ -316,6 +334,7 @@ const Background = () => {
           />
           <g opacity="0.7">
             <rect
+              className="animate-opacity"
               x="822.385"
               y="770.859"
               width="80.2262"
@@ -324,6 +343,7 @@ const Background = () => {
               fillOpacity="0.36"
             />
             <rect
+              className="animate-opacity"
               x="418.962"
               y="770.859"
               width="80.2262"
@@ -332,6 +352,7 @@ const Background = () => {
               fillOpacity="0.25"
             />
             <rect
+              className="animate-opacity"
               x="1145.58"
               y="206.983"
               width="80.2262"
@@ -340,6 +361,7 @@ const Background = () => {
               fillOpacity="0.11"
             />
             <rect
+              className="animate-opacity"
               x="499.188"
               y="126.757"
               width="80.2262"
@@ -348,6 +370,7 @@ const Background = () => {
               fillOpacity="0.31"
             />
             <rect
+              className="animate-opacity"
               x="1064.21"
               y="287.209"
               width="80.2262"
@@ -356,6 +379,7 @@ const Background = () => {
               fillOpacity="0.11"
             />
             <rect
+              className="animate-opacity"
               x="417.816"
               y="206.983"
               width="80.2262"
@@ -364,6 +388,7 @@ const Background = () => {
               fillOpacity="0.31"
             />
             <rect
+              className="animate-opacity"
               x="1064.21"
               y="206.983"
               width="80.2262"
@@ -372,6 +397,7 @@ const Background = () => {
               fillOpacity="0.11"
             />
             <rect
+              className="animate-opacity"
               x="417.816"
               y="126.757"
               width="80.2262"
@@ -380,6 +406,7 @@ const Background = () => {
               fillOpacity="0.31"
             />
             <rect
+              className="animate-opacity"
               x="338.736"
               y="770.859"
               width="80.2262"
@@ -388,6 +415,7 @@ const Background = () => {
               fillOpacity="0.25"
             />
             <rect
+              className="animate-opacity"
               x="338.736"
               y="851.085"
               width="80.2262"
@@ -396,6 +424,7 @@ const Background = () => {
               fillOpacity="0.25"
             />
             <rect
+              className="animate-opacity"
               x="177.137"
               y="690.633"
               width="80.2262"
@@ -404,6 +433,7 @@ const Background = () => {
               fillOpacity="0.25"
             />
             <rect
+              className="animate-opacity"
               x="983.984"
               y="45.3846"
               width="80.2262"
@@ -412,6 +442,7 @@ const Background = () => {
               fillOpacity="0.61"
             />
             <rect
+              className="animate-opacity"
               x="903.758"
               y="-46.3024"
               width="80.2262"
@@ -420,6 +451,7 @@ const Background = () => {
               fillOpacity="0.61"
             />
             <rect
+              className="animate-opacity"
               x="902.881"
               y="44.2385"
               width="80.2262"
@@ -428,6 +460,7 @@ const Background = () => {
               fillOpacity="0.61"
             />
             <rect
+              className="animate-opacity"
               x="177.138"
               y="124.465"
               width="81.3723"
@@ -436,6 +469,7 @@ const Background = () => {
               fillOpacity="0.24"
             />
             <rect
+              className="animate-opacity"
               x="95.7652"
               y="44.2385"
               width="81.3723"
@@ -444,6 +478,7 @@ const Background = () => {
               fillOpacity="0.24"
             />
             <rect
+              className="animate-opacity"
               x="15.539"
               y="45.3846"
               width="81.3723"
@@ -452,6 +487,7 @@ const Background = () => {
               fillOpacity="0.24"
             />
             <rect
+              className="animate-opacity"
               x="95.7652"
               y="124.465"
               width="81.3723"
@@ -460,6 +496,7 @@ const Background = () => {
               fillOpacity="0.24"
             />
             <rect
+              className="animate-opacity"
               x="418.962"
               y="-35.9877"
               width="81.3723"
@@ -467,6 +504,7 @@ const Background = () => {
               fill="#895AF6"
             />
             <rect
+              className="animate-opacity"
               x="177.138"
               y="286.063"
               width="80.2262"
@@ -475,6 +513,7 @@ const Background = () => {
               fillOpacity="0.24"
             />
             <rect
+              className="animate-opacity"
               x="1145.58"
               y="690.633"
               width="80.2262"
@@ -483,6 +522,7 @@ const Background = () => {
               fillOpacity="0.26"
             />
             <rect
+              className="animate-opacity"
               x="1225.81"
               y="770.859"
               width="80.2262"
