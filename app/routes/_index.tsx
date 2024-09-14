@@ -20,7 +20,7 @@ import UploadedFileEntry, {
 import { formatTimeWithDescription, humanFileSize } from "@/utils";
 import { UploadCloudIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
-import { MAX_SIZE } from "@/constants";
+import { GITHUB_URL, GITHUB_USERNAME, MAX_SIZE } from "@/constants";
 import { useImmerAtom } from "jotai-immer";
 import { uploadedFilesAtom } from "@/store";
 
@@ -145,6 +145,9 @@ export default function Index() {
           </CardTitle>
           <CardDescription>
             You can upload photos, documents, music, videos and more.
+            <p>
+              Made with ❤️ by <a href={GITHUB_URL}>{GITHUB_USERNAME}</a>
+            </p>
           </CardDescription>
         </CardHeader>
 
