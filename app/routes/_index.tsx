@@ -146,7 +146,15 @@ export default function Index() {
           <CardDescription>
             You can upload photos, documents, music, videos and more.
             <p>
-              Made with ❤️ by <a href={GITHUB_URL}>{GITHUB_USERNAME}</a>
+              Made with ❤️ by{" "}
+              <a
+                target="_blank"
+                href={GITHUB_URL}
+                className="transition-colors duration-300 hover:text-primary"
+                rel="noreferrer"
+              >
+                {GITHUB_USERNAME}
+              </a>
             </p>
           </CardDescription>
         </CardHeader>
