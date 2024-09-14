@@ -1,8 +1,18 @@
+import { MAX_SIZE } from "@/constants";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-  const files = formData.getAll("file");
+  const files = formData.getAll("file") as File[];
+
+  const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+
+  if (totalSize > MAX_SIZE) {
+    return json(
+      { success: false, error: "Total size of files exceeds the limit of 5GB" },
+      { status: 400 }
+    );
+  }
 
   const newFormData = new FormData();
 

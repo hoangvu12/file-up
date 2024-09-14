@@ -20,6 +20,7 @@ import { themeSessionResolver } from "./sessions.server";
 import ThemeSwitcher from "./components/theme-switcher";
 import { cn } from "./lib/utils";
 import Background from "./components/background";
+import { Toaster } from "./components/ui/sonner";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { getTheme } = await themeSessionResolver(request);
@@ -80,6 +81,7 @@ function InnerLayout({
         suppressHydrationWarning
       >
         {children}
+        <Toaster />
         <Background />
         <ThemeSwitcher />
         <ScrollRestoration />

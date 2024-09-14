@@ -19,6 +19,8 @@ import UploadedFileEntry, {
 } from "@/components/uploaded-file-entry";
 import { formatTimeWithDescription, humanFileSize } from "@/utils";
 import { UploadCloudIcon, XIcon } from "lucide-react";
+import { toast } from "sonner";
+import { MAX_SIZE } from "@/constants";
 
 export const meta: MetaFunction = () => {
   return [
@@ -39,6 +41,16 @@ export default function Index() {
   const startTimeRef = useRef<number | null>(null);
 
   const handleSubmit = async () => {
+    if (!files?.length) {
+      return toast.error("Please select a file to upload.");
+    }
+
+    const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+
+    if (totalSize > MAX_SIZE) {
+      return toast.error("Total size of files exceeds the limit of 5GB.");
+    }
+
     const formData = new FormData();
 
     files.forEach((file) => {
@@ -83,14 +95,17 @@ export default function Index() {
         if (xhr.status === 200) {
           setFiles([]);
 
-          // get response
           const response = JSON.parse(xhr.response) as {
             success: boolean;
             files: UploadedFile[];
           };
 
           if (response.success) {
+            toast.success("Files are uploaded successfully.");
+
             setUploadedFiles(response.files);
+          } else {
+            toast.error("Failed to upload files.");
           }
         }
       }
@@ -98,6 +113,8 @@ export default function Index() {
 
     xhr.onerror = () => {
       setIsUploading(false);
+
+      toast.error("Something went wrong, failed to upload files.");
     };
 
     xhr.send(formData);
@@ -110,13 +127,18 @@ export default function Index() {
   const abort = () => {
     xhrRef.current?.abort();
     setIsUploading(false);
+
+    toast.info("Uploading process is cancelled.");
   };
 
   return (
     <main className="flex min-h-screen items-center justify-center">
       <Card className="my-16 w-full max-w-xl">
         <CardHeader>
-          <CardTitle>Upload your file</CardTitle>
+          <CardTitle>
+            Upload your file (Max size:
+            {" " + humanFileSize(MAX_SIZE)})
+          </CardTitle>
           <CardDescription>
             You can upload photos, documents, music, videos and more.
           </CardDescription>
