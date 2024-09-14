@@ -1,4 +1,3 @@
-import { Progress } from "@/components/ui/progress";
 import { humanFileSize } from "@/utils";
 import {
   FileAudioIcon,
@@ -19,6 +18,7 @@ export enum FileType {
 
 export interface FileEntryProps {
   file: File;
+  onRemove?: () => void;
 }
 
 const detectFileType = (file: File) => {
@@ -46,38 +46,37 @@ const fileTypeToIcon = {
   [FileType.FILE]: FileIcon,
 };
 
-const FileEntry: React.FC<FileEntryProps> = ({ file }) => {
+const FileEntry: React.FC<FileEntryProps> = ({ file, onRemove }) => {
   const fileType = detectFileType(file);
   const FileIcon = fileTypeToIcon[fileType];
 
   return (
-    <div className="relative grid grid-cols-11 gap-4 rounded-xl border-2 border-border p-3 transition-[border] duration-300 hover:border-foreground">
+    <div className="relative grid grid-cols-11 items-center gap-4 rounded-xl border-2 border-border p-3 transition-[border] duration-300 hover:border-foreground">
       <div className="flex justify-center">
         <FileIcon size={24} className="col-span-1" />
       </div>
 
-      <div className="col-span-10">
-        <div className="w-2/3">
-          <p className="line-clamp-2 break-words text-base font-semibold leading-none tracking-tight">
-            {file.name}
-          </p>
-        </div>
+      <div className="col-span-10 flex justify-between">
+        <div className="grid w-full grid-cols-10 items-center">
+          <div className="col-span-9">
+            <div className="w-2/3">
+              <p className="line-clamp-2 break-words text-base font-semibold leading-none tracking-tight">
+                {file.name}
+              </p>
+            </div>
 
-        <p className="text-sm">{humanFileSize(file.size)}</p>
+            <p className="text-sm">{humanFileSize(file.size)}</p>
+          </div>
 
-        <div className="flex w-full items-center gap-4">
-          <Progress value={50} className="h-2.5 grow" />
-
-          <p className="text-sm font-semibold tabular-nums">50%</p>
+          <Button
+            variant="destructive"
+            className="col-span-1"
+            onClick={onRemove}
+          >
+            <XIcon size={16} />
+          </Button>
         </div>
       </div>
-
-      <Button
-        variant="outline"
-        className="absolute right-2 top-2 border-0 bg-transparent p-1 hover:bg-black/10 dark:hover:bg-white/20"
-      >
-        <XIcon size={24} />
-      </Button>
     </div>
   );
 };
