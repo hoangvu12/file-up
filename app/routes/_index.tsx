@@ -26,8 +26,8 @@ import { uploadedFilesAtom } from "@/store";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Media uploader - hoangvu12" },
-    { name: "description", content: "It's private" },
+    { title: "File uploader - hoangvu12" },
+    { name: "description", content: "Just a file uploader made by hoangvu12" },
   ];
 };
 
