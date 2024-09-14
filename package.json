@@ -1,5 +1,5 @@
 {
-  "name": "media-uploader",
+  "name": "file-uploader",
   "private": true,
   "sideEffects": false,
   "type": "module",
