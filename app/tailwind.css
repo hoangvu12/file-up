@@ -97,12 +97,25 @@ body {
   }
 
   @keyframes staggerOpacity {
+    0% {
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.75;
+    }
     50% {
       opacity: 0.5;
+    }
+    75% {
+      opacity: 0.75;
+    }
+    100% {
+      opacity: 1;
     }
   }
 
   .animate-opacity {
-    animation: staggerOpacity 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: staggerOpacity 2.5s ease-in-out infinite;
+    will-change: opacity;
   }
 }

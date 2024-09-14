@@ -6,9 +6,12 @@ const Background = () => {
       document.querySelectorAll(".animate-opacity")
     ) as HTMLElement[];
 
-    elements.forEach((element, index) => {
-      const delay = index * 0.5;
+    const totalElements = elements.length;
+    const maxDelay = 2; // maximum total delay in seconds
+    const delayIncrement = maxDelay / totalElements;
 
+    elements.forEach((element, index) => {
+      const delay = index * delayIncrement;
       element.style.animationDelay = `${delay}s`;
     });
   }, []);
