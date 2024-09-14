@@ -21,6 +21,8 @@ import { formatTimeWithDescription, humanFileSize } from "@/utils";
 import { UploadCloudIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { MAX_SIZE } from "@/constants";
+import { useImmerAtom } from "jotai-immer";
+import { uploadedFilesAtom } from "@/store";
 
 export const meta: MetaFunction = () => {
   return [
@@ -31,7 +33,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const [files, setFiles] = useState<File[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useImmerAtom(uploadedFilesAtom);
   const [isUploading, setIsUploading] = useState(false);
   const [loaded, setLoaded] = useState(0);
   const [total, setTotal] = useState(1);
@@ -103,7 +105,9 @@ export default function Index() {
           if (response.success) {
             toast.success("Files are uploaded successfully.");
 
-            setUploadedFiles(response.files);
+            setUploadedFiles((draft) => {
+              draft.push(...response.files);
+            });
           } else {
             toast.error("Failed to upload files.");
           }
@@ -184,8 +188,16 @@ export default function Index() {
               </p>
 
               <div className="space-y-2">
-                {uploadedFiles.map((file) => (
-                  <UploadedFileEntry key={file.hash} file={file} />
+                {uploadedFiles.map((file, index) => (
+                  <UploadedFileEntry
+                    key={file.hash}
+                    file={file}
+                    onRemove={() => {
+                      setUploadedFiles((draft) => {
+                        draft.splice(index, 1);
+                      });
+                    }}
+                  />
                 ))}
               </div>
             </AutoAnimateContainer>
