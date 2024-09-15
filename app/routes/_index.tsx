@@ -50,20 +50,22 @@ export default function Index() {
     const totalSize = files.reduce((acc, file) => acc + file.size, 0);
 
     if (totalSize > MAX_SIZE) {
-      return toast.error("Total size of files exceeds the limit of 5GB.");
+      return toast.error(
+        `Total size of files exceeds the limit of ${humanFileSize(MAX_SIZE)}.`
+      );
     }
 
     const formData = new FormData();
 
     files.forEach((file) => {
-      formData.append("file", file);
+      formData.append("files[]", file);
     });
 
     const xhr = new XMLHttpRequest();
 
     setIsUploading(true);
 
-    xhr.open("POST", "/action/upload", true);
+    xhr.open("POST", "https://up1.fileditch.com/upload.php", true);
 
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) {
