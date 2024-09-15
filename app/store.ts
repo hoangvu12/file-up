@@ -5,3 +5,8 @@ export const uploadedFilesAtom = atomWithStorage<UploadedFile[]>(
   "uploadedFiles",
   []
 );
+
+export const shouldUploadFilesTemporarilyAtom = atomWithStorage(
+  "shouldUploadFilesTemporarily",
+  false
+);

@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 import AutoAnimateContainer from "@/components/auto-animate-container";
 import { ClientOnly } from "@/components/client-only";
@@ -22,7 +22,10 @@ import { UploadCloudIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { GITHUB_URL, GITHUB_USERNAME, MAX_SIZE } from "@/constants";
 import { useImmerAtom } from "jotai-immer";
-import { uploadedFilesAtom } from "@/store";
+import { shouldUploadFilesTemporarilyAtom, uploadedFilesAtom } from "@/store";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { useAtom } from "jotai/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,6 +41,8 @@ export default function Index() {
   const [loaded, setLoaded] = useState(0);
   const [total, setTotal] = useState(1);
   const [remainingTime, setRemainingTime] = useState("");
+  const [shouldUploadFilesTemporarily, setShouldUploadFilesTemporarily] =
+    useAtom(shouldUploadFilesTemporarilyAtom);
 
   const xhrRef = useRef<XMLHttpRequest | null>(null);
   const startTimeRef = useRef<number | null>(null);
@@ -65,7 +70,11 @@ export default function Index() {
 
     setIsUploading(true);
 
-    xhr.open("POST", "https://up1.fileditch.com/upload.php", true);
+    const uploadUrl = shouldUploadFilesTemporarily
+      ? "https://up1.fileditch.com/temp/upload.php"
+      : "https://up1.fileditch.com/upload.php";
+
+    xhr.open("POST", uploadUrl, true);
 
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) {
@@ -168,29 +177,42 @@ export default function Index() {
             </ClientOnly>
 
             {files.length > 0 ? (
-              <div className="mt-4 flex justify-end gap-4">
-                {isUploading ? (
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm tabular-nums">
-                      {humanFileSize(loaded)} / {humanFileSize(total)}
-                    </p>
+              <React.Fragment>
+                <div className="mt-4 flex items-center justify-between gap-4">
+                  <Label className="font-semibold">
+                    Upload temporarily (delete after 72 hours)
+                  </Label>
 
-                    <div className="size-1 rounded-md bg-primary" />
+                  <Switch
+                    checked={shouldUploadFilesTemporarily}
+                    onCheckedChange={setShouldUploadFilesTemporarily}
+                  />
+                </div>
 
-                    <p className="text-sm tabular-nums">{remainingTime}</p>
-                  </div>
-                ) : null}
-
-                <Button onClick={isUploading ? abort : handleSubmit}>
+                <div className="mt-4 flex justify-end gap-4">
                   {isUploading ? (
-                    <XIcon size={16} />
-                  ) : (
-                    <UploadCloudIcon size={16} />
-                  )}
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm tabular-nums">
+                        {humanFileSize(loaded)} / {humanFileSize(total)}
+                      </p>
 
-                  <p className="ml-2">{isUploading ? "Cancel" : "Upload"}</p>
-                </Button>
-              </div>
+                      <div className="size-1 rounded-md bg-primary" />
+
+                      <p className="text-sm tabular-nums">{remainingTime}</p>
+                    </div>
+                  ) : null}
+
+                  <Button onClick={isUploading ? abort : handleSubmit}>
+                    {isUploading ? (
+                      <XIcon size={16} />
+                    ) : (
+                      <UploadCloudIcon size={16} />
+                    )}
+
+                    <p className="ml-2">{isUploading ? "Cancel" : "Upload"}</p>
+                  </Button>
+                </div>
+              </React.Fragment>
             ) : null}
           </div>
 
