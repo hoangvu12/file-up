@@ -1,40 +1,72 @@
-# Welcome to Remix!
+# FileUp
 
-- 📖 [Remix docs](https://remix.run/docs)
+**FileUp** is a simple and elegant file uploader built using [Remix](https://remix.run/), [shadcn](https://shadcn.dev/), and [Fileditch](https://fileditch.com) as the file storage provider.
 
-## Development
+Note: All the uploaded files are stored in the browser's local storage.
 
-Run the dev server:
+Please read the [Fileditch FAQ](https://fileditch.com/faq.html).
 
-```shellscript
-npm run dev
-```
+![preview](https://small.fileditchstuff.me/s16/QjbtvUsZklsIVPXrFyA.png)
 
-## Deployment
+## Features
 
-First, build your app for production:
+- Elegant and simple user interface
+- Fast file uploads using Fileditch
+
+## Getting Started
+
+Follow these instructions to set up the project locally.
+
+### Prerequisites
+
+- [Bun](https://bun.sh/) - A fast JavaScript runtime (Install it if you haven't already)
+- Node.js (Recommended for compatibility)
+
+### Installation
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/hoangvu12/file-up
+   cd file-up
+   ```
+
+2. Install the dependencies:
+
+   ```sh
+   bun install
+   ```
+
+### Development
+
+Run the development server:
 
 ```sh
-npm run build
+bun dev
 ```
 
-Then run the app in production mode:
+This will start the app in development mode. Open [http://localhost:5173](http://localhost:5173) in your browser to view it.
 
-```sh
-npm start
-```
+### Deployment
 
-Now you'll need to pick a host to deploy it to.
+To deploy the app for production, follow these steps:
 
-### DIY
+1. Build your app for production:
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+   ```sh
+   bun run build
+   ```
 
-Make sure to deploy the output of `npm run build`
+2. Start the app in production mode:
 
-- `build/server`
-- `build/client`
+   ```sh
+   bun start
+   ```
 
-## Styling
+## Contributing
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+Contributions are welcome! Feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
