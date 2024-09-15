@@ -179,11 +179,15 @@ export default function Index() {
             {files.length > 0 ? (
               <React.Fragment>
                 <div className="mt-4 flex items-center justify-between gap-4">
-                  <Label className="font-semibold">
+                  <Label
+                    htmlFor="should-upload-files-temporarily"
+                    className="font-semibold"
+                  >
                     Upload temporarily (delete after 72 hours)
                   </Label>
 
                   <Switch
+                    id="should-upload-files-temporarily"
                     checked={shouldUploadFilesTemporarily}
                     onCheckedChange={setShouldUploadFilesTemporarily}
                   />
