@@ -117,7 +117,7 @@ export default function Index() {
             toast.success("Files are uploaded successfully.");
 
             setUploadedFiles((draft) => {
-              draft.push(...response.files);
+              draft.unshift(...response.files);
             });
           } else {
             toast.error("Failed to upload files.");
