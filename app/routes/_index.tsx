@@ -26,6 +26,8 @@ import { shouldUploadFilesTemporarilyAtom, uploadedFilesAtom } from "@/store";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useAtom } from "jotai/react";
+import BigUploadArrow from "@/components/big-upload-arrow";
+import UploadButtonArrow from "@/components/upload-button-arrow";
 
 export const meta: MetaFunction = () => {
   return [
@@ -172,9 +174,15 @@ export default function Index() {
 
         <CardContent className="px-6">
           <div className="w-full space-y-4">
-            <ClientOnly fallback={<FileUploaderPlaceholder />}>
-              {() => <FileUploader files={files} onChange={setFiles} />}
-            </ClientOnly>
+            <div className="relative">
+              <ClientOnly fallback={<FileUploaderPlaceholder />}>
+                {() => <FileUploader files={files} onChange={setFiles} />}
+              </ClientOnly>
+
+              <AutoAnimateContainer className="absolute -left-48 top-1/2 -translate-y-1/2">
+                {!files.length ? <BigUploadArrow /> : null}
+              </AutoAnimateContainer>
+            </div>
 
             {files.length > 0 ? (
               <React.Fragment>
@@ -193,7 +201,7 @@ export default function Index() {
                   />
                 </div>
 
-                <div className="mt-4 flex justify-end gap-4">
+                <div className="relative mt-4 flex justify-end gap-4">
                   {isUploading ? (
                     <div className="flex items-center gap-2">
                       <p className="text-sm tabular-nums">
@@ -215,32 +223,38 @@ export default function Index() {
 
                     <p className="ml-2">{isUploading ? "Cancel" : "Upload"}</p>
                   </Button>
+
+                  <AutoAnimateContainer className="absolute -right-40 -top-2">
+                    <UploadButtonArrow />
+                  </AutoAnimateContainer>
                 </div>
               </React.Fragment>
             ) : null}
           </div>
 
-          {(uploadedFiles?.length || 0) > 0 ? (
-            <AutoAnimateContainer className="mt-8">
-              <p className="mb-2 text-lg font-semibold">
-                Uploaded ({uploadedFiles.length})
-              </p>
+          <AutoAnimateContainer>
+            {(uploadedFiles?.length || 0) > 0 ? (
+              <div className="mt-8">
+                <p className="mb-2 text-lg font-semibold">
+                  Uploaded ({uploadedFiles.length})
+                </p>
 
-              <div className="space-y-2">
-                {uploadedFiles.map((file, index) => (
-                  <UploadedFileEntry
-                    key={file.hash}
-                    file={file}
-                    onRemove={() => {
-                      setUploadedFiles((draft) => {
-                        draft.splice(index, 1);
-                      });
-                    }}
-                  />
-                ))}
+                <div className="space-y-2">
+                  {uploadedFiles.map((file, index) => (
+                    <UploadedFileEntry
+                      key={file.hash}
+                      file={file}
+                      onRemove={() => {
+                        setUploadedFiles((draft) => {
+                          draft.splice(index, 1);
+                        });
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
-            </AutoAnimateContainer>
-          ) : null}
+            ) : null}
+          </AutoAnimateContainer>
         </CardContent>
       </Card>
     </main>
