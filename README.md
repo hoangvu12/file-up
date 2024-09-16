@@ -2,7 +2,7 @@
 
 **FileUp** is a simple and elegant file uploader built using [Remix](https://remix.run/), [shadcn](https://shadcn.dev/), and [Fileditch](https://fileditch.com) as the file storage provider.
 
-Note: All the uploaded files are stored in the browser's local storage.
+Note: All the uploaded files data that returned from Fileditch are stored in the browser's local storage.
 
 Please read the [Fileditch FAQ](https://fileditch.com/faq.html).
 
