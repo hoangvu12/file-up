@@ -33,6 +33,10 @@ export const meta: MetaFunction = () => {
   return [
     { title: "File uploader - hoangvu12" },
     { name: "description", content: "Just a file uploader made by hoangvu12" },
+    {
+      property: "og:image",
+      content: "https://small.fileditchstuff.me/s16/QjbtvUsZklsIVPXrFyA.png",
+    },
   ];
 };
 
