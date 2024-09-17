@@ -20,7 +20,12 @@ import UploadedFileEntry, {
 import { formatTimeWithDescription, humanFileSize } from "@/utils";
 import { UploadCloudIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
-import { GITHUB_URL, GITHUB_USERNAME, MAX_SIZE } from "@/constants";
+import {
+  GITHUB_URL,
+  GITHUB_USERNAME,
+  MAX_SIZE as NAX_FILE_PERM,
+  MAX_SIZE_TEMP,
+} from "@/constants";
 import { useImmerAtom } from "jotai-immer";
 import { shouldUploadFilesTemporarilyAtom, uploadedFilesAtom } from "@/store";
 import { Label } from "@/components/ui/label";
@@ -40,6 +45,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+const getMaxFile = (isTemp: boolean) =>
+  isTemp ? MAX_SIZE_TEMP : NAX_FILE_PERM;
+
 export default function Index() {
   const [files, setFiles] = useState<File[]>([]);
   const [uploadedFiles, setUploadedFiles] = useImmerAtom(uploadedFilesAtom);
@@ -53,6 +61,8 @@ export default function Index() {
   const xhrRef = useRef<XMLHttpRequest | null>(null);
   const startTimeRef = useRef<number | null>(null);
 
+  const MAX_FILE = getMaxFile(shouldUploadFilesTemporarily);
+
   const handleSubmit = async () => {
     if (!files?.length) {
       return toast.error("Please select a file to upload.");
@@ -60,9 +70,9 @@ export default function Index() {
 
     const totalSize = files.reduce((acc, file) => acc + file.size, 0);
 
-    if (totalSize > MAX_SIZE) {
+    if (totalSize > MAX_FILE) {
       return toast.error(
-        `Total size of files exceeds the limit of ${humanFileSize(MAX_SIZE)}.`
+        `Total size of files exceeds the limit of ${humanFileSize(MAX_FILE)}.`
       );
     }
 
@@ -158,7 +168,7 @@ export default function Index() {
         <CardHeader>
           <CardTitle>
             Upload your file (Max size:
-            {" " + humanFileSize(MAX_SIZE)})
+            {" " + humanFileSize(MAX_FILE)})
           </CardTitle>
           <CardDescription>
             You can upload photos, documents, music, videos and more.
@@ -188,23 +198,23 @@ export default function Index() {
               </AutoAnimateContainer>
             </div>
 
+            <div className="mt-4 flex items-center justify-between gap-4">
+              <Label
+                htmlFor="should-upload-files-temporarily"
+                className="font-semibold"
+              >
+                Upload temporarily (delete after 72 hours)
+              </Label>
+
+              <Switch
+                id="should-upload-files-temporarily"
+                checked={shouldUploadFilesTemporarily}
+                onCheckedChange={setShouldUploadFilesTemporarily}
+              />
+            </div>
+
             {files.length > 0 ? (
               <React.Fragment>
-                <div className="mt-4 flex items-center justify-between gap-4">
-                  <Label
-                    htmlFor="should-upload-files-temporarily"
-                    className="font-semibold"
-                  >
-                    Upload temporarily (delete after 72 hours)
-                  </Label>
-
-                  <Switch
-                    id="should-upload-files-temporarily"
-                    checked={shouldUploadFilesTemporarily}
-                    onCheckedChange={setShouldUploadFilesTemporarily}
-                  />
-                </div>
-
                 <div className="relative mt-4 flex justify-end gap-4">
                   {isUploading ? (
                     <div className="flex items-center gap-2">
