@@ -234,17 +234,19 @@ export default function Index() {
             {files.length > 0 ? (
               <React.Fragment>
                 <div className="relative mt-4 flex justify-end gap-4">
-                  {isUploading && loaded && total && remainingTime ? (
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm tabular-nums">
-                        {humanFileSize(loaded)} / {humanFileSize(total)}
-                      </p>
+                  <AutoAnimateContainer className="flex items-center">
+                    {isUploading && loaded && total && remainingTime ? (
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm tabular-nums">
+                          {humanFileSize(loaded)} / {humanFileSize(total)}
+                        </p>
 
-                      <div className="size-1 rounded-md bg-primary" />
+                        <div className="size-1 rounded-md bg-primary" />
 
-                      <p className="text-sm tabular-nums">{remainingTime}</p>
-                    </div>
-                  ) : null}
+                        <p className="text-sm tabular-nums">{remainingTime}</p>
+                      </div>
+                    ) : null}
+                  </AutoAnimateContainer>
 
                   <Button onClick={isUploading ? abort : handleSubmit}>
                     {isUploading ? (
@@ -271,7 +273,7 @@ export default function Index() {
                   Uploaded ({uploadedFiles.length})
                 </p>
 
-                <div className="space-y-2">
+                <AutoAnimateContainer className="space-y-2">
                   {uploadedFiles.map((file, index) => (
                     <UploadedFileEntry
                       key={file.hash}
@@ -283,7 +285,7 @@ export default function Index() {
                       }}
                     />
                   ))}
-                </div>
+                </AutoAnimateContainer>
               </div>
             ) : null}
           </AutoAnimateContainer>
