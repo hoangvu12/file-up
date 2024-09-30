@@ -234,7 +234,7 @@ export default function Index() {
             {files.length > 0 ? (
               <React.Fragment>
                 <div className="relative mt-4 flex justify-end gap-4">
-                  {isUploading ? (
+                  {isUploading && loaded && total && remainingTime ? (
                     <div className="flex items-center gap-2">
                       <p className="text-sm tabular-nums">
                         {humanFileSize(loaded)} / {humanFileSize(total)}
