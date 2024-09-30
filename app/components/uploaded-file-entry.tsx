@@ -1,6 +1,6 @@
 import { humanFileSize } from "@/utils";
 import { DownloadIcon, FileIcon, XIcon } from "lucide-react";
-import React from "react";
+import React, { useMemo } from "react";
 import { Button } from "./ui/button";
 
 export interface UploadedFile {
@@ -9,6 +9,8 @@ export interface UploadedFile {
   url: string;
   size: number;
   onRemove?: () => void;
+  isTemp?: boolean;
+  uploadedAt?: number;
 }
 
 export interface UploadedFileEntryProps {
@@ -20,6 +22,12 @@ const UploadedFileEntry: React.FC<UploadedFileEntryProps> = ({
   file,
   onRemove,
 }) => {
+  const isExpired = useMemo(() => {
+    if (!file.isTemp) return false;
+
+    return Date.now() - (file.uploadedAt || 0) > 72 * 60 * 60 * 1000;
+  }, [file.uploadedAt, file.isTemp]);
+
   return (
     <div className="relative grid grid-cols-11 items-center gap-4 rounded-xl border-2 border-border p-3 transition-[border] duration-300 hover:border-foreground">
       <div className="col-span-1 flex justify-center">
@@ -39,21 +47,27 @@ const UploadedFileEntry: React.FC<UploadedFileEntryProps> = ({
           </div>
 
           <div className="col-span-3 flex items-center justify-end gap-2">
-            <a
-              className="block"
-              href={file.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Button
-                variant="default"
-                onClick={() => {
-                  window.open(file.url, "_blank");
-                }}
+            {!isExpired ? (
+              <a
+                className="block"
+                href={file.url}
+                target="_blank"
+                rel="noreferrer"
               >
-                <DownloadIcon size={16} />
-              </Button>
-            </a>
+                <Button
+                  variant="default"
+                  onClick={() => {
+                    window.open(file.url, "_blank");
+                  }}
+                >
+                  <DownloadIcon size={16} />
+                </Button>
+              </a>
+            ) : (
+              <span className="inline-block rounded bg-primary px-2 py-1 text-xs text-white">
+                Expired
+              </span>
+            )}
 
             <Button variant="destructive" onClick={onRemove}>
               <XIcon size={16} />

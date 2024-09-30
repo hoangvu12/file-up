@@ -2,6 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 import React, { useEffect, useRef, useState } from "react";
 
 import AutoAnimateContainer from "@/components/auto-animate-container";
+import BigUploadArrow from "@/components/big-upload-arrow";
 import { ClientOnly } from "@/components/client-only";
 import FileUploader, {
   FileUploaderPlaceholder,
@@ -14,25 +15,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import UploadButtonArrow from "@/components/upload-button-arrow";
 import UploadedFileEntry, {
   UploadedFile,
 } from "@/components/uploaded-file-entry";
-import { formatTimeWithDescription, humanFileSize } from "@/utils";
-import { UploadCloudIcon, XIcon } from "lucide-react";
-import { toast } from "sonner";
 import {
   GITHUB_URL,
   GITHUB_USERNAME,
-  MAX_SIZE as NAX_FILE_PERM,
   MAX_SIZE_TEMP,
+  MAX_SIZE as NAX_FILE_PERM,
 } from "@/constants";
-import { useImmerAtom } from "jotai-immer";
 import { shouldUploadFilesTemporarilyAtom, uploadedFilesAtom } from "@/store";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { formatTimeWithDescription, humanFileSize } from "@/utils";
+import { useImmerAtom } from "jotai-immer";
 import { useAtom } from "jotai/react";
-import BigUploadArrow from "@/components/big-upload-arrow";
-import UploadButtonArrow from "@/components/upload-button-arrow";
+import { UploadCloudIcon, XIcon } from "lucide-react";
+import { toast } from "sonner";
 
 // https://github.com/emilkowalski/sonner/issues/386#issuecomment-2286569378
 import "../styles/sonner.css";
@@ -158,7 +158,13 @@ export default function Index() {
         toast.success("Files are uploaded successfully.");
 
         setUploadedFiles((draft) => {
-          draft.unshift(...response.files);
+          const files = response.files.map((file) => ({
+            ...file,
+            isTemp: shouldUploadFilesTemporarily,
+            uploadedAt: Date.now(),
+          }));
+
+          draft.unshift(...files);
         });
       } else {
         if (response.description) {
