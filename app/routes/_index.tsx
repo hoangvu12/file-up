@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import AutoAnimateContainer from "@/components/auto-animate-container";
 import { ClientOnly } from "@/components/client-only";
@@ -161,6 +161,21 @@ export default function Index() {
 
     toast.info("Uploading process is cancelled.");
   };
+
+  useEffect(() => {
+    window.onbeforeunload = (e) => {
+      if (!isUploading) return null;
+
+      e = e || window.event;
+
+      if (e) {
+        e.returnValue =
+          "Are you sure you want to leave this page? Your upload will be cancelled.";
+      }
+
+      return "Are you sure you want to leave this page? Your upload will be cancelled.";
+    };
+  }, [isUploading]);
 
   return (
     <main className="flex min-h-screen items-center justify-center">
