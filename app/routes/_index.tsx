@@ -96,51 +96,75 @@ export default function Index() {
     xhr.open("POST", uploadUrl, true);
 
     xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) {
-        setLoaded(e.loaded);
-        setTotal(e.total || 1);
+      if (!e.lengthComputable) return;
 
-        const uploadedBytes = e.loaded;
-        const totalBytes = e.total;
-        const elapsedTime =
-          (Date.now() - (startTimeRef.current || Date.now())) / 1000;
-        const uploadSpeed = uploadedBytes / elapsedTime;
-        const remainingBytes = totalBytes - uploadedBytes;
-        const remainingTime = remainingBytes / uploadSpeed;
+      setLoaded(e.loaded);
+      setTotal(e.total || 1);
 
-        setRemainingTime(formatTimeWithDescription(remainingTime));
-      }
+      const uploadedBytes = e.loaded;
+      const totalBytes = e.total;
+      const elapsedTime =
+        (Date.now() - (startTimeRef.current || Date.now())) / 1000;
+      const uploadSpeed = uploadedBytes / elapsedTime;
+      const remainingBytes = totalBytes - uploadedBytes;
+      const remainingTime = remainingBytes / uploadSpeed;
+
+      setRemainingTime(formatTimeWithDescription(remainingTime));
     };
 
     xhr.onload = () => {
-      if (xhr.status === 200) {
-        setFiles([]);
-        setIsUploading(false);
-        xhrRef.current = null;
-      }
+      if (xhr.status !== 200) return;
+
+      setFiles([]);
+      setIsUploading(false);
+      xhrRef.current = null;
     };
 
     xhr.onreadystatechange = () => {
-      if (xhr.readyState === 4) {
-        setIsUploading(false);
+      if (xhr.readyState !== 4) return;
 
-        if (xhr.status === 200) {
-          setFiles([]);
+      setIsUploading(false);
 
-          const response = JSON.parse(xhr.response) as {
-            success: boolean;
+      if (xhr.status !== 200) {
+        const response = JSON.parse(xhr.response) as {
+          success: false;
+          errorcode: number;
+          description: string;
+        };
+
+        if (response.description) {
+          toast.error(response.description);
+        } else {
+          toast.error("Failed to upload files.");
+        }
+
+        return;
+      }
+
+      setFiles([]);
+
+      const response = JSON.parse(xhr.response) as
+        | {
+            success: true;
             files: UploadedFile[];
+          }
+        | {
+            success: false;
+            errorcode: number;
+            description: string;
           };
 
-          if (response.success) {
-            toast.success("Files are uploaded successfully.");
+      if (response.success) {
+        toast.success("Files are uploaded successfully.");
 
-            setUploadedFiles((draft) => {
-              draft.unshift(...response.files);
-            });
-          } else {
-            toast.error("Failed to upload files.");
-          }
+        setUploadedFiles((draft) => {
+          draft.unshift(...response.files);
+        });
+      } else {
+        if (response.description) {
+          toast.error(response.description);
+        } else {
+          toast.error("Failed to upload files.");
         }
       }
     };
