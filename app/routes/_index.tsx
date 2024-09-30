@@ -34,6 +34,9 @@ import { useAtom } from "jotai/react";
 import BigUploadArrow from "@/components/big-upload-arrow";
 import UploadButtonArrow from "@/components/upload-button-arrow";
 
+// https://github.com/emilkowalski/sonner/issues/386#issuecomment-2286569378
+import "../styles/sonner.css";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "File uploader - hoangvu12" },
