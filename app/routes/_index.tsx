@@ -126,16 +126,20 @@ export default function Index() {
       setIsUploading(false);
 
       if (xhr.status !== 200) {
-        const response = JSON.parse(xhr.response) as {
-          success: false;
-          errorcode: number;
-          description: string;
-        };
+        try {
+          const response = JSON.parse(xhr.response) as {
+            success: false;
+            errorcode: number;
+            description: string;
+          };
 
-        if (response.description) {
-          toast.error(response.description);
-        } else {
-          toast.error("Failed to upload files.");
+          if (response.description) {
+            toast.error(response.description);
+          } else {
+            toast.error("Failed to upload files.");
+          }
+        } catch (error) {
+          toast.error("Failed to upload files. Fileditch is down?");
         }
 
         return;
