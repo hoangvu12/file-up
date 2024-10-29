@@ -75,6 +75,12 @@ function InnerLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+
+        <script
+          defer
+          data-domain="uploader.nguyenvu.dev"
+          src="https://ana.nguyenvu.dev/js/script.js"
+        ></script>
       </head>
       <body
         className={cn(theme === Theme.DARK ? "dark" : "")}
