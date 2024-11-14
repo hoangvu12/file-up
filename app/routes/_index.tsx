@@ -37,6 +37,15 @@ import { toast } from "sonner";
 // https://github.com/emilkowalski/sonner/issues/386#issuecomment-2286569378
 import "../styles/sonner.css";
 
+const copyToClipboard = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast.success("Link copied to clipboard!");
+  } catch (err) {
+    toast.error("Failed to copy link");
+  }
+};
+
 export const meta: MetaFunction = () => {
   return [
     { title: "File uploader - hoangvu12" },
@@ -317,6 +326,7 @@ export default function Index() {
                           draft.splice(index, 1);
                         });
                       }}
+                      onCopy={() => copyToClipboard(file.url)}
                     />
                   ))}
                 </AutoAnimateContainer>

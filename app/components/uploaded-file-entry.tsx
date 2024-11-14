@@ -1,5 +1,5 @@
 import { humanFileSize } from "@/utils";
-import { DownloadIcon, FileIcon, XIcon } from "lucide-react";
+import { CopyIcon, DownloadIcon, FileIcon, XIcon } from "lucide-react";
 import React, { useMemo } from "react";
 import { Button } from "./ui/button";
 
@@ -16,11 +16,13 @@ export interface UploadedFile {
 export interface UploadedFileEntryProps {
   file: UploadedFile;
   onRemove?: () => void;
+  onCopy: () => void;
 }
 
 const UploadedFileEntry: React.FC<UploadedFileEntryProps> = ({
   file,
   onRemove,
+  onCopy,
 }) => {
   const isExpired = useMemo(() => {
     if (!file.isTemp) return false;
@@ -55,7 +57,6 @@ const UploadedFileEntry: React.FC<UploadedFileEntryProps> = ({
                 rel="noreferrer"
               >
                 <Button
-                  variant="default"
                   onClick={() => {
                     window.open(file.url, "_blank");
                   }}
@@ -68,6 +69,10 @@ const UploadedFileEntry: React.FC<UploadedFileEntryProps> = ({
                 Expired
               </span>
             )}
+
+            <Button onClick={onCopy}>
+              <CopyIcon size={16} />
+            </Button>
 
             <Button variant="destructive" onClick={onRemove}>
               <XIcon size={16} />
