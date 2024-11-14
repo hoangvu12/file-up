@@ -30,6 +30,15 @@ const UploadedFileEntry: React.FC<UploadedFileEntryProps> = ({
     return Date.now() - (file.uploadedAt || 0) > 72 * 60 * 60 * 1000;
   }, [file.uploadedAt, file.isTemp]);
 
+  const downloadFile = () => {
+    const a = document.createElement("a");
+
+    a.target = "_blank";
+    a.href = file.url;
+    a.download = file.name.toString();
+    a.click();
+  };
+
   return (
     <div className="relative grid grid-cols-11 items-center gap-4 rounded-xl border-2 border-border p-3 transition-[border] duration-300 hover:border-foreground">
       <div className="col-span-1 flex justify-center">
@@ -50,20 +59,9 @@ const UploadedFileEntry: React.FC<UploadedFileEntryProps> = ({
 
           <div className="col-span-3 flex items-center justify-end gap-2">
             {!isExpired ? (
-              <a
-                className="block"
-                href={file.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Button
-                  onClick={() => {
-                    window.open(file.url, "_blank");
-                  }}
-                >
-                  <DownloadIcon size={16} />
-                </Button>
-              </a>
+              <Button onClick={downloadFile}>
+                <DownloadIcon size={16} />
+              </Button>
             ) : (
               <span className="inline-block rounded bg-primary px-2 py-1 text-xs text-white">
                 Expired
