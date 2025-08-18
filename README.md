@@ -1,17 +1,17 @@
 # FileUp
 
-**FileUp** is a simple and elegant file uploader built using [Remix](https://remix.run/), [shadcn](https://shadcn.dev/), and [Fileditch](https://fileditch.com) as the file storage provider.
+**FileUp** is a simple and elegant file uploader built using [Remix](https://remix.run/), [shadcn](https://shadcn.dev/), and [Catbox](https://catbox.moe) as the file storage provider.
 
-Note: All the uploaded files data that returned from Fileditch are stored in the browser's local storage.
-
-Please read the [Fileditch FAQ](https://fileditch.com/faq.html).
+Note: All the uploaded files data that returned from Catbox are stored in the browser's local storage.
 
 ![preview](https://small.fileditchstuff.me/s16/QjbtvUsZklsIVPXrFyA.png)
 
 ## Features
 
 - Elegant and simple user interface
-- Fast file uploads using Fileditch
+- Fast file uploads using Catbox
+- Maximum file size: 200MB per file
+- Server-side upload handling for security
 
 ## Getting Started
 

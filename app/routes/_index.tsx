@@ -15,8 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import UploadButtonArrow from "@/components/upload-button-arrow";
 import UploadedFileEntry, {
   UploadedFile,
@@ -49,7 +47,7 @@ const copyToClipboard = async (text: string) => {
 export const meta: MetaFunction = () => {
   return [
     { title: "File uploader - hoangvu12" },
-    { name: "description", content: "Just a file uploader made by hoangvu12" },
+    { name: "description", content: "A simple file uploader using Catbox.moe for storage" },
     {
       property: "og:image",
       content: "https://small.fileditchstuff.me/s16/QjbtvUsZklsIVPXrFyA.png",
@@ -67,8 +65,7 @@ export default function Index() {
   const [loaded, setLoaded] = useState(0);
   const [total, setTotal] = useState(1);
   const [remainingTime, setRemainingTime] = useState("");
-  const [shouldUploadFilesTemporarily, setShouldUploadFilesTemporarily] =
-    useAtom(shouldUploadFilesTemporarilyAtom);
+  const [shouldUploadFilesTemporarily] = useAtom(shouldUploadFilesTemporarilyAtom);
 
   const xhrRef = useRef<XMLHttpRequest | null>(null);
   const startTimeRef = useRef<number | null>(null);
@@ -91,18 +88,14 @@ export default function Index() {
     const formData = new FormData();
 
     files.forEach((file) => {
-      formData.append("files[]", file);
+      formData.append("file", file);
     });
 
     const xhr = new XMLHttpRequest();
 
     setIsUploading(true);
 
-    const uploadUrl = shouldUploadFilesTemporarily
-      ? "https://up1.fileditch.com/temp/upload.php"
-      : "https://up1.fileditch.com/upload.php";
-
-    xhr.open("POST", uploadUrl, true);
+    xhr.open("POST", "/action/upload", true);
 
     xhr.upload.onprogress = (e) => {
       if (!e.lengthComputable) return;
@@ -138,17 +131,16 @@ export default function Index() {
         try {
           const response = JSON.parse(xhr.response) as {
             success: false;
-            errorcode: number;
-            description: string;
+            error: string;
           };
 
-          if (response.description) {
-            toast.error(response.description);
+          if (response.error) {
+            toast.error(response.error);
           } else {
             toast.error("Failed to upload files.");
           }
         } catch (error) {
-          toast.error("Failed to upload files. Fileditch is down?");
+          toast.error("Failed to upload files. Server error.");
         }
 
         return;
@@ -163,8 +155,7 @@ export default function Index() {
           }
         | {
             success: false;
-            errorcode: number;
-            description: string;
+            error: string;
           };
 
       if (response.success) {
@@ -173,15 +164,15 @@ export default function Index() {
         setUploadedFiles((draft) => {
           const files = response.files.map((file) => ({
             ...file,
-            isTemp: shouldUploadFilesTemporarily,
+            isTemp: false, // Catbox doesn't support temporary uploads
             uploadedAt: Date.now(),
           }));
 
           draft.unshift(...files);
         });
       } else {
-        if (response.description) {
-          toast.error(response.description);
+        if (response.error) {
+          toast.error(response.error);
         } else {
           toast.error("Failed to upload files.");
         }
@@ -259,7 +250,8 @@ export default function Index() {
               </AutoAnimateContainer>
             </div>
 
-            <div className="mt-4 flex items-center justify-between gap-4">
+            {/* Catbox doesn't support temporary uploads, so we'll hide this option */}
+            {/* <div className="mt-4 flex items-center justify-between gap-4">
               <Label
                 htmlFor="should-upload-files-temporarily"
                 className="font-semibold"
@@ -272,7 +264,7 @@ export default function Index() {
                 checked={shouldUploadFilesTemporarily}
                 onCheckedChange={setShouldUploadFilesTemporarily}
               />
-            </div>
+            </div> */}
 
             {files.length > 0 ? (
               <React.Fragment>

@@ -14,28 +14,43 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const newFormData = new FormData();
+  // Upload files sequentially to Catbox
+  const uploadedFiles = [];
+  
+  for (const file of files) {
+    const newFormData = new FormData();
+    newFormData.append("reqtype", "fileupload");
+    newFormData.append("fileToUpload", file);
 
-  files.forEach((file) => {
-    newFormData.append("files[]", file);
-  });
+    const response = await fetch("https://catbox.moe/user/api.php", {
+      method: "POST",
+      body: newFormData,
+    });
 
-  const response = await fetch("https://up1.fileditch.com/upload.php", {
-    method: "POST",
-    body: newFormData,
-  });
+    if (!response.ok) {
+      return json(
+        { success: false, error: `Error uploading file ${file.name}` },
+        { status: 400 }
+      );
+    }
 
-  const responseData = (await response.json()) as {
-    success: boolean;
-    files: string[];
-  };
-
-  if (!response.ok) {
-    return json(
-      { success: false, error: "Error uploading file" },
-      { status: 400 }
-    );
+    const responseText = await response.text();
+    const url = responseText.trim();
+    
+    if (url.startsWith("https://")) {
+      uploadedFiles.push({
+        name: file.name,
+        url: url,
+        size: file.size,
+        hash: Date.now().toString() + uploadedFiles.length,
+      });
+    } else {
+      return json(
+        { success: false, error: `Failed to upload ${file.name}: ${responseText}` },
+        { status: 400 }
+      );
+    }
   }
 
-  return json({ success: true, files: responseData.files });
+  return json({ success: true, files: uploadedFiles });
 };
